@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+venv/
+
+# Secrets
+.env
+.env.*
+
+# Flask
+instance/
+
+# IDE and macOS
+.vscode/
+.DS_Store
+
+# Testing and logs
+.pytest_cache/
+.coverage
+*.log

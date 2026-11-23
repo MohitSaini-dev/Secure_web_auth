@@ -1,0 +1,45 @@
+
+{% extends "base.html" %}
+
+{% block title %}Register | SecureAuth{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <section class="auth-card">
+        <div class="auth-icon">◆</div>
+        <h1>Create Account</h1>
+        <p class="subtitle">Create your secure account to get started.</p>
+
+        <form method="POST" action="{{ url_for('auth.register') }}">
+             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div class="form-group">
+                <label for="name">Full name</label>
+                <input type="text" id="name" name="name"
+                       autocomplete="name" maxlength="100" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email address</label>
+                <input type="email" id="email" name="email"
+                       autocomplete="email" maxlength="255" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password"
+                       autocomplete="new-password" minlength="12" required>
+                <small>Use at least 12 characters.</small>
+            </div>
+
+            <button type="submit" class="btn btn-full">
+                Create Account
+            </button>
+        </form>
+
+        <p class="auth-bottom">
+            Already have an account?
+            <a href="{{ url_for('auth.login') }}">Login here</a>
+        </p>
+    </section>
+</div>
+{% endblock %}

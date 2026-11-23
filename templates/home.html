@@ -1,0 +1,47 @@
+
+{% extends "base.html" %}
+
+{% block title %}Home | SecureAuth{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <p class="eyebrow">ACCOUNT SECURITY</p>
+    <h1>Welcome to SecureAuth</h1>
+    <p>
+        A secure authentication application built with Flask,
+        PostgreSQL, and Argon2 password hashing.
+    </p>
+
+    <div class="actions">
+        {% if session.get('user_id') %}
+            <a class="btn" href="{{ url_for('auth.dashboard') }}">
+                Go to Dashboard
+            </a>
+        {% else %}
+            <a class="btn" href="{{ url_for('auth.register') }}">
+                Create Account
+            </a>
+            <a class="btn btn-secondary" href="{{ url_for('auth.login') }}">
+                Login
+            </a>
+        {% endif %}
+    </div>
+</section>
+
+<section class="feature-grid">
+    <article class="feature-card">
+        <h2>Password Protection</h2>
+        <p>Passwords are stored as Argon2 hashes.</p>
+    </article>
+
+    <article class="feature-card">
+        <h2>Two-Factor Authentication</h2>
+        <p>Add an authenticator code as a second login factor.</p>
+    </article>
+
+    <article class="feature-card">
+        <h2>Secure Sessions</h2>
+        <p>Access your dashboard after successful authentication.</p>
+    </article>
+</section>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends "base.html" %} 
+{% block title %}Dashboard | SecureAuth{% endblock %} 
+
+{% block content %} 
+<section class="dashboard-header"> 
+    <p class="eyebrow">YOUR ACCOUNT</p> 
+    <h1>Welcome, {{ user.name }}</h1> 
+    <p class="muted">You are successfully logged in.</p> 
+</section> 
+
+<section class="dashboard-grid"> 
+    <article class="feature-card"> 
+        <h2>Account Details</h2> 
+        <p><strong>Name:</strong> {{ user.name }}</p> 
+        <p><strong>Email:</strong> {{ user.email }}</p> 
+        <p><strong>Role:</strong> {{ user.role }}</p> 
+    </article> 
+    
+    <article class="feature-card"> 
+        <h2>Two-Factor Authentication</h2> 
+        {% if user.mfa_enabled %} 
+            <p class="status-enabled">Enabled</p> 
+            <p>Your account requires an authenticator code at login.</p> 
+            <a class="btn btn-secondary" href="{{ url_for('auth.mfa_disable') }}"> Disable MFA </a> 
+        {% else %} 
+            <p class="muted">Not enabled</p> 
+            <p>Improve account security with a second login factor.</p> 
+            <a class="btn" href="{{ url_for('auth.mfa_setup') }}"> Set Up MFA </a> 
+        {% endif %} 
+    </article> 
+
+    <article class="feature-card">
+        <h2>Security Actions</h2>
+        <p>Keep your credentials up to date.</p>
+        <a class="btn btn-secondary" href="{{ url_for('auth.change_password') }}"> Change Password </a> 
+    </article>
+
+    <!-- Standardized Mobile Number Card -->
+    <article class="feature-card">
+        <h2>Mobile Number</h2>
+        {% if user.phone_verified %}
+            <p class="status-enabled">Verified</p>
+            <p>Your mobile number is securely verified.</p>
+        {% else %}
+            <p class="muted">Not verified</p>
+            <p>Verify your mobile number to confirm ownership.</p>
+            <a class="btn" href="{{ url_for('auth.phone_verify') }}"> Verify Mobile Number </a>
+        {% endif %}
+    </article>
+</section> 
+{% endblock %}

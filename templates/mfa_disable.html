@@ -1,0 +1,42 @@
+
+{% extends "base.html" %}
+
+{% block title %}Disable MFA | SecureAuth{% endblock %}
+
+{% block content %}
+<section class="auth-card">
+    <div class="auth-container"></div>
+    <h1>Disable Two-Factor Authentication</h1>
+
+    <p class="muted">
+        Confirm your identity before disabling MFA.
+    </p>
+
+    <form method="POST" action="{{ url_for('auth.mfa_disable') }}">
+         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="form-group">
+            <label for="password">Current password</label>
+            <input type="password" id="password" name="password"
+                   autocomplete="current-password" required>
+        </div>
+
+        <div class="form-group">
+            <label for="code">Authenticator code</label>
+            <input type="text" id="code" name="code"
+                   inputmode="numeric" pattern="[0-9]{6}"
+                   maxlength="6" minlength="6"
+                   autocomplete="one-time-code"
+                   placeholder="000000" required>
+        </div>
+
+        <button type="submit" class="btn btn-danger btn-full">
+            Confirm and Disable MFA
+        </button>
+    </form>
+
+    <p class="form-footer">
+        <a href="{{ url_for('auth.dashboard') }}">Cancel and return</a>
+    </p>
+</section>
+</div>
+{% endblock %}

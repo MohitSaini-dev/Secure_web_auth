@@ -1,0 +1,151 @@
+
+{% extends "base.html" %}
+
+{% block title %}Verify Login | SecureAuth{% endblock %}
+
+{% block content %}
+<style>
+    .auth-card .mfa-icon {
+        width: 64px;
+        height: 64px;
+        margin: 0 auto 22px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 18px;
+        background: rgba(59, 130, 246, 0.12);
+        border: 1px solid rgba(59, 130, 246, 0.25);
+        font-size: 29px;
+    }
+
+    .auth-card .mfa-label {
+        text-align: center;
+        color: #3b82f6;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+    }
+
+    .auth-card h1 {
+        text-align: center;
+        margin-bottom: 12px;
+    }
+
+    .auth-card .muted {
+        text-align: center;
+        line-height: 1.7;
+        margin-bottom: 28px;
+    }
+
+    .auth-card .mfa-code {
+        width: 100%;
+        box-sizing: border-box;
+        text-align: center;
+        font-size: 27px;
+        font-weight: 700;
+        letter-spacing: 12px;
+        font-variant-numeric: tabular-nums;
+        padding: 16px 10px;
+        border-radius: 12px;
+        margin-top: 8px;
+        margin-bottom: 8px;
+    }
+
+    .auth-card .mfa-code:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+    }
+
+    .auth-card .mfa-help {
+        font-size: 12px;
+        color: #94a3b8;
+        margin: 8px 0 22px;
+        text-align: center;
+    }
+
+    .auth-card .mfa-security-note {
+        margin-top: 24px;
+        padding-top: 18px;
+        border-top: 1px solid rgba(148, 163, 184, 0.2);
+        text-align: center;
+        font-size: 12px;
+        line-height: 1.7;
+    }
+
+    .auth-card .mfa-back {
+        display: block;
+        margin-top: 18px;
+        text-align: center;
+        font-size: 13px;
+        text-decoration: none;
+    }
+
+    @media (max-width: 480px) {
+        .auth-card .mfa-code {
+            font-size: 24px;
+            letter-spacing: 9px;
+        }
+    }
+</style>
+
+<section class="auth-card">
+    <div class="mfa-icon" aria-hidden="true">&#128274;</div>
+
+    <div class="mfa-label">SecureAuth Protection</div>
+
+    <h1>Verify Your Identity</h1>
+
+    <p class="muted">
+        Open your authenticator app and enter the current
+        six-digit verification code to securely access your account.
+    </p>
+
+    <form method="POST" action="{{ url_for('auth.mfa_login') }}">
+        <input
+            type="hidden"
+            name="csrf_token"
+            value="{{ csrf_token() }}"
+        >
+
+        <div class="form-group">
+            <label for="code">Authenticator code</label>
+
+            <input
+                type="text"
+                id="code"
+                name="code"
+                class="mfa-code"
+                inputmode="numeric"
+                pattern="[0-9]{6}"
+                maxlength="6"
+                minlength="6"
+                autocomplete="one-time-code"
+                placeholder="000000"
+                aria-describedby="mfa-help"
+                required
+                autofocus
+            >
+
+            <p id="mfa-help" class="mfa-help">
+                Enter all six digits shown in your authenticator app.
+            </p>
+        </div>
+
+        <button type="submit" class="btn btn-full">
+            Verify and Continue
+        </button>
+    </form>
+
+    <div class="mfa-security-note muted">
+        <strong>Keep your account safe</strong><br>
+        Never share your authentication code with anyone.
+    </div>
+
+    <a href="{{ url_for('auth.login') }}" class="mfa-back">
+        &larr; Back to Login
+    </a>
+</section>
+{% endblock %}

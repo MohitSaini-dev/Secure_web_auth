@@ -1,0 +1,312 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .activity-page {
+        max-width: 1150px;
+        margin: 40px auto;
+        padding: 0 24px 40px;
+        color: #e8edf7;
+    }
+
+    .activity-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        flex-wrap: wrap;
+        margin-bottom: 28px;
+    }
+
+    .activity-eyebrow {
+        color: #60a5fa;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-size: 12px;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .activity-header h1 {
+        font-size: 30px;
+        font-weight: 750;
+        margin: 0 0 8px;
+    }
+
+    .activity-header p {
+        color: #9caec8;
+        margin: 0;
+        line-height: 1.6;
+    }
+
+    .activity-card {
+        background: #111a2c;
+        border: 1px solid #26344c;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+    }
+
+    .activity-card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+        flex-wrap: wrap;
+        padding: 22px 24px;
+        border-bottom: 1px solid #26344c;
+    }
+
+    .activity-card-header h2 {
+        font-size: 18px;
+        margin: 0 0 5px;
+    }
+
+    .activity-card-header p {
+        color: #9caec8;
+        font-size: 13px;
+        margin: 0;
+    }
+
+    .activity-count {
+        background: #1d2b43;
+        color: #bfdbfe;
+        padding: 7px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        white-space: nowrap;
+    }
+
+    .activity-table-wrap {
+        overflow-x: auto;
+    }
+
+    .activity-table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+    }
+
+    .activity-table th {
+        background: #172238;
+        color: #aebed6;
+        padding: 15px 24px;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        white-space: nowrap;
+    }
+
+    .activity-table td {
+        padding: 18px 24px;
+        border-top: 1px solid #202e44;
+        font-size: 13px;
+        color: #e2e8f0;
+        white-space: nowrap;
+    }
+
+    .activity-table tbody tr:hover {
+        background: #172238;
+    }
+
+    .event-name {
+        font-weight: 650;
+        text-transform: capitalize;
+    }
+
+    .status {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 6px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .status-success {
+        background: rgba(34, 197, 94, 0.12);
+        color: #86efac;
+    }
+
+    .status-failed {
+        background: rgba(248, 113, 113, 0.12);
+        color: #fca5a5;
+    }
+
+    .status-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+    }
+
+    .activity-empty {
+        text-align: center;
+        padding: 55px 20px;
+        white-space: normal !important;
+    }
+
+    .activity-empty-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 58px;
+        height: 58px;
+        margin: 0 auto 16px;
+        border-radius: 16px;
+        background: #1d2b43;
+        color: #93c5fd;
+        font-size: 26px;
+    }
+
+    .activity-empty h3 {
+        color: #e8edf7;
+        font-size: 17px;
+        margin: 0 0 8px;
+    }
+
+    .activity-empty p {
+        color: #9caec8;
+        font-size: 13px;
+        margin: 0;
+    }
+
+    .activity-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+        padding: 18px 24px;
+        border-top: 1px solid #26344c;
+        color: #91a3bd;
+        font-size: 12px;
+    }
+
+    .activity-btn {
+        display: inline-block;
+        padding: 11px 16px;
+        border: 1px solid #34445e;
+        border-radius: 9px;
+        color: #e8edf7;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 600;
+        transition: background 0.2s;
+    }
+
+    .activity-btn:hover {
+        background: #1d2b43;
+        color: #ffffff;
+    }
+
+    @media (max-width: 600px) {
+        .activity-page {
+            margin-top: 25px;
+            padding: 0 12px 25px;
+        }
+
+        .activity-header h1 {
+            font-size: 25px;
+        }
+
+        .activity-card-header,
+        .activity-footer {
+            padding: 17px;
+        }
+
+        .activity-table th,
+        .activity-table td {
+            padding: 14px 16px;
+        }
+    }
+</style>
+
+<div class="activity-page">
+
+    <div class="activity-header">
+        <div>
+            <div class="activity-eyebrow">Account protection</div>
+            <h1>Security Activity</h1>
+            <p>Monitor recent sign-ins and security events associated with your account.</p>
+        </div>
+
+        <a href="{{ url_for('auth.dashboard') }}" class="activity-btn">
+            &larr; Back to Dashboard
+        </a>
+    </div>
+
+    <section class="activity-card">
+
+        <div class="activity-card-header">
+            <div>
+                <h2>Recent events</h2>
+                <p>Your latest account security activity</p>
+            </div>
+
+            <span class="activity-count">
+                {{ events|length }} events
+            </span>
+        </div>
+
+        <div class="activity-table-wrap">
+            <table class="activity-table">
+                <thead>
+                    <tr>
+                        <th>Date and time</th>
+                        <th>Event</th>
+                        <th>Status</th>
+                        <th>IP address</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for event in events %}
+                    <tr>
+                        <td>
+                            {{ event.created_at.strftime("%d %b %Y, %H:%M:%S") }}
+                        </td>
+
+                        <td class="event-name">
+                            {{ event.event_type.replace("_", " ")|title }}
+                        </td>
+
+                        <td>
+                            {% if event.success %}
+                            <span class="status status-success">
+                                <span class="status-dot"></span>
+                                Successful
+                            </span>
+                            {% else %}
+                            <span class="status status-failed">
+                                <span class="status-dot"></span>
+                                Failed
+                            </span>
+                            {% endif %}
+                        </td>
+
+                        <td>{{ event.ip_address or "Unavailable" }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="4" class="activity-empty">
+                            <div class="activity-empty-icon">&#128274;</div>
+                            <h3>No security activity yet</h3>
+                            <p>Your recorded login and security events will appear here.</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="activity-footer">
+            <span>Showing up to 50 recent events</span>
+            <span>SecureAuth &middot; Security monitoring</span>
+        </div>
+
+    </section>
+</div>
+{% endblock %}

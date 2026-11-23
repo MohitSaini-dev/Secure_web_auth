@@ -1,0 +1,194 @@
+
+{% extends "base.html" %}
+
+{% block title %}Set Up MFA | SecureAuth{% endblock %}
+
+{% block content %}
+<section class="auth-card mfa-card">
+    <div class="mfa-header">
+        <div class="mfa-icon" aria-hidden="true">🔐</div>
+        <h1>Set Up Two-Factor Authentication</h1>
+        <p>
+            Add an extra layer of security to your account.
+            Scan the QR code with your authenticator app, then enter
+            the six-digit code to confirm setup.
+        </p>
+    </div>
+
+    <div class="qr-container">
+        <img
+            src="data:image/png;base64,{{ qr_code }}"
+            alt="Authenticator setup QR code"
+            width="220"
+            height="220"
+        >
+    </div>
+
+    <details class="manual-secret">
+        <summary>Can't scan the QR code?</summary>
+        <div class="manual-secret-content">
+            <p>Enter this setup key manually in your authenticator app:</p>
+            <code>{{ secret }}</code>
+        </div>
+    </details>
+
+    <form method="POST" action="{{ url_for('auth.mfa_setup') }}">
+         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="form-group">
+            <label for="code">Six-digit verification code</label>
+            <input
+                type="text"
+                id="code"
+                name="code"
+                inputmode="numeric"
+                pattern="[0-9]{6}"
+                maxlength="6"
+                minlength="6"
+                autocomplete="one-time-code"
+                placeholder="000000"
+                required
+            >
+        </div>
+
+        <button type="submit" class="btn btn-full">
+            Verify and Enable MFA
+        </button>
+    </form>
+
+    <p class="muted mfa-note">
+        MFA will only be enabled after the code is verified.
+    </p>
+</section>
+
+<style>
+.mfa-card {
+    width: min(100% - 32px, 480px);
+    margin: 40px auto;
+    padding: 32px;
+    box-sizing: border-box;
+}
+
+.mfa-header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.mfa-icon {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 16px;
+    display: grid;
+    place-items: center;
+    border-radius: 16px;
+    background: rgba(52, 211, 153, 0.12);
+    font-size: 26px;
+}
+
+.mfa-header h1 {
+    margin: 0 0 12px;
+    font-size: clamp(24px, 5vw, 30px);
+    line-height: 1.25;
+}
+
+.mfa-header p {
+    margin: 0;
+    line-height: 1.7;
+    opacity: 0.82;
+}
+
+.qr-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+    margin: 24px auto;
+    background: #fff;
+    border-radius: 16px;
+    width: fit-content;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.qr-container img {
+    display: block;
+    width: 220px;
+    height: 220px;
+    max-width: 100%;
+    object-fit: contain;
+    image-rendering: pixelated;
+}
+
+.manual-secret {
+    margin: 20px 0 24px;
+    padding: 14px 16px;
+    border: 1px solid rgba(148, 163, 184, 0.25);
+    border-radius: 12px;
+}
+
+.manual-secret summary {
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.manual-secret-content {
+    margin-top: 12px;
+}
+
+.manual-secret-content p {
+    line-height: 1.6;
+}
+
+.manual-secret code {
+    display: block;
+    padding: 12px;
+    overflow-wrap: anywhere;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.2);
+    line-height: 1.6;
+    user-select: all;
+}
+
+.mfa-card .form-group {
+    margin-bottom: 18px;
+}
+
+.mfa-card label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.mfa-card input[name="code"] {
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+    letter-spacing: 6px;
+    font-size: 20px;
+    padding: 14px;
+}
+
+.mfa-card .btn-full {
+    width: 100%;
+}
+
+.mfa-note {
+    margin: 14px 0 0;
+    text-align: center;
+    font-size: 13px;
+    line-height: 1.6;
+    opacity: 0.75;
+}
+
+@media (max-width: 480px) {
+    .mfa-card {
+        margin: 20px auto;
+        padding: 24px 20px;
+    }
+
+    .qr-container img {
+        width: 200px;
+        height: 200px;
+    }
+}
+</style>
+{% endblock %}

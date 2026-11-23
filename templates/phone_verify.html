@@ -1,0 +1,154 @@
+
+{% extends "base.html" %}
+
+{% block title %}Verify Mobile Number | SecureAuth{% endblock %}
+
+{% block content %}
+<section class="auth-card phone-card">
+    <header class="phone-header">
+        <div class="phone-icon" aria-hidden="true">☎</div>
+        <h1>Verify Your Mobile Number</h1>
+        <p>Receive a one-time password by SMS to confirm ownership of your number.</p>
+    </header>
+
+    <form method="POST" action="{{ url_for('auth.phone_verify') }}">
+         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="form-group">
+            <label for="phone_number">Mobile number</label>
+            <input
+                type="tel"
+                id="phone_number"
+                name="phone_number"
+                value="{{ user.phone_number or '' }}"
+                placeholder="+919876543210"
+                autocomplete="tel"
+                required
+            >
+            <small>Include your country code, for example +91 for India.</small>
+        </div>
+
+        <button class="btn btn-full" type="submit">
+            Send verification code
+        </button>
+    </form>
+
+    <div class="phone-divider"></div>
+
+    <form method="POST" action="{{ url_for('auth.phone_verify_code') }}">
+        <div class="form-group">
+            <label for="code">Six-digit OTP</label>
+            <input
+                type="text"
+                id="code"
+                name="code"
+                inputmode="numeric"
+                pattern="[0-9]{6}"
+                minlength="6"
+                maxlength="6"
+                autocomplete="one-time-code"
+                placeholder="000000"
+                required
+            >
+        </div>
+
+        <button class="btn btn-full" type="submit">
+            Verify mobile number
+        </button>
+    </form>
+
+    <p class="phone-note">
+        Your OTP expires after five minutes. Never share it with anyone.
+    </p>
+</section>
+
+<style>
+.phone-card {
+    width: min(100% - 32px, 460px);
+    margin: 40px auto;
+    padding: 32px;
+    box-sizing: border-box;
+}
+
+.phone-header {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.phone-icon {
+    width: 56px;
+    height: 56px;
+    display: grid;
+    place-items: center;
+    margin: 0 auto 16px;
+    border-radius: 16px;
+    background: rgba(52, 211, 153, 0.12);
+    font-size: 28px;
+}
+
+.phone-header h1 {
+    font-size: clamp(24px, 5vw, 30px);
+    line-height: 1.25;
+    margin: 0 0 12px;
+}
+
+.phone-header p,
+.phone-note {
+    line-height: 1.65;
+    opacity: 0.8;
+}
+
+.phone-card .form-group {
+    margin-bottom: 18px;
+}
+
+.phone-card label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.phone-card input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 13px 14px;
+    border-radius: 9px;
+    font-size: 16px;
+}
+
+.phone-card input[name="code"] {
+    text-align: center;
+    letter-spacing: 7px;
+    font-size: 21px;
+}
+
+.phone-card small {
+    display: block;
+    margin-top: 8px;
+    line-height: 1.5;
+    opacity: 0.75;
+}
+
+.phone-card .btn-full {
+    width: 100%;
+}
+
+.phone-divider {
+    height: 1px;
+    background: rgba(148, 163, 184, 0.25);
+    margin: 26px 0;
+}
+
+.phone-note {
+    font-size: 13px;
+    text-align: center;
+    margin: 18px 0 0;
+}
+
+@media (max-width: 480px) {
+    .phone-card {
+        margin: 20px auto;
+        padding: 24px 20px;
+    }
+}
+</style>
+{% endblock %}
